@@ -1,13 +1,90 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  --red: #e5473b;
+  --black: #111111;
+  --lime: #c8f000;
+  --off-white: #f9f9f7;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--off-white);
+  color: var(--black);
+}
+
+.brutal-box {
+  border: 2px solid var(--black);
+  background: white;
+  padding: 24px;
+}
+
+.brutal-btn {
+  border: 2px solid var(--black);
+  background: var(--lime);
+  color: var(--black);
+  font-weight: 900;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  transition: transform 0.1s ease;
+}
+
+.brutal-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--black);
+}
+
+.brutal-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.brutal-input {
+  border: 2px solid var(--black);
+  padding: 10px 12px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  width: 100%;
+}
+
+.brutal-input:focus {
+  outline: none;
+  border-color: var(--red);
+}
+
+.brutal-label {
+  font-weight: 900;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.status-success {
+  background: var(--lime);
+  border: 2px solid var(--black);
+  padding: 12px;
+  font-weight: 700;
+}
+
+.status-error {
+  background: var(--red);
+  color: white;
+  border: 2px solid var(--black);
+  padding: 12px;
+  font-weight: 700;
+}
+
+.status-pending {
+  background: #fff3cd;
+  border: 2px solid var(--black);
+  padding: 12px;
+  font-weight: 700;
 }

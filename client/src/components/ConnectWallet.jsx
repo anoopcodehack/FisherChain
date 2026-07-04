@@ -18,15 +18,20 @@ function ConnectWallet({ onConnected }) {
   };
 
   return (
-    <div style={{ padding: "20px", border: "2px solid #111", marginBottom: "20px" }}>
+    <div className="brutal-box" style={{ marginBottom: "24px" }}>
       {account ? (
-        <p><strong>Connected:</strong> {account.slice(0, 6)}...{account.slice(-4)}</p>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div style={{ width: "10px", height: "10px", background: "var(--lime)", border: "2px solid var(--black)", borderRadius: "50%" }} />
+          <p style={{ fontWeight: 900 }}>
+            CONNECTED: {account.slice(0, 6)}...{account.slice(-4)}
+          </p>
+        </div>
       ) : (
-        <button onClick={connectWallet} style={{ padding: "10px 20px", fontWeight: "bold" }}>
-          Connect MetaMask
+        <button onClick={connectWallet} className="brutal-btn">
+          CONNECT METAMASK
         </button>
       )}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="status-error" style={{ marginTop: "10px" }}>{error}</p>}
     </div>
   );
 }
