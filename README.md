@@ -71,4 +71,3 @@ fisherchain/
 │   └── architecture-diagram.png
 │
 └── README.md
-```
