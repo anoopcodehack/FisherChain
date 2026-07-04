@@ -16,49 +16,50 @@ fisherchain/
 ├── contracts/
 │   ├── FisherChain.sol
 │   ├── AccessControl.sol
-│   └── libraries/BatchLib.sol
+│   └── libraries/
+│       └── BatchLib.sol
 │
 ├── scripts/
-│   ├── deploy.js              // Hardhat deployment script
-│   └── seedData.js            // test data for demo
+│   ├── deploy.js
+│   └── seedData.js
 │
 ├── test/
-│   └── FisherChain.test.js    // Hardhat/Chai contract tests
+│   └── FisherChain.test.js
 │
 ├── hardhat.config.js
 │
-├── client/                     // React frontend
+├── client/
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── ConnectWallet.jsx
-│   │   │   ├── CatchForm.jsx          // fisherman logs catch
-│   │   │   ├── TransferForm.jsx       // distributor/retailer transfer
-│   │   │   ├── BatchCard.jsx          // display single batch
-│   │   │   ├── QRGenerator.jsx        // generates QR per batch
-│   │   │   └── BatchTimeline.jsx      // visual chain-of-custody
+│   │   │   ├── CatchForm.jsx
+│   │   │   ├── TransferForm.jsx
+│   │   │   ├── BatchCard.jsx
+│   │   │   ├── QRGenerator.jsx
+│   │   │   └── BatchTimeline.jsx
 │   │   │
 │   │   ├── pages/
 │   │   │   ├── FishermanDashboard.jsx
 │   │   │   ├── DistributorDashboard.jsx
 │   │   │   ├── RetailerDashboard.jsx
-│   │   │   ├── ConsumerLookup.jsx     // public QR scan result page
+│   │   │   ├── ConsumerLookup.jsx
 │   │   │   └── AdminPanel.jsx
 │   │   │
 │   │   ├── contexts/
-│   │   │   └── Web3Context.jsx        // ethers.js provider/contract setup
+│   │   │   └── Web3Context.jsx
 │   │   │
 │   │   ├── utils/
-│   │   │   ├── contract.js            // contract ABI + address config
-│   │   │   └── ipfs.js                // Pinata/web3.storage upload helper
+│   │   │   ├── contract.js
+│   │   │   └── ipfs.js
 │   │   │
 │   │   ├── App.jsx
 │   │   └── index.js
 │   │
 │   └── package.json
 │
-├── server/                     // Node/Express backend (optional layer)
+├── server/
 │   ├── models/
-│   │   └── User.js             // off-chain role/profile data (MongoDB)
+│   │   └── User.js
 │   ├── routes/
 │   │   └── auth.js
 │   ├── controllers/
