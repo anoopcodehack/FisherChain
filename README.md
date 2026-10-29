@@ -1,7 +1,7 @@
 # FisherChain Enterprise Seafood Traceability Protocol
 
 <p align="center">
-  <img src="client/public/assets/logo.png" alt="FisherChain Enterprise Protocol" width="460" />
+  <img src="assets/logo.png" alt="FisherChain Enterprise Protocol" width="460" />
 </p>
 
 <p align="center">
