@@ -1,101 +1,78 @@
-import { useState, useEffect } from "react";
-import { getContract, getAllBatches } from "../utils/contract";
-import { STAGE_LABELS } from "../utils/constants";
+import { useState, useEffect, useCallback } from "react";
+import { getContract, getAllBatches, getReadOnlyContract } from "../utils/contract";
+import { useWeb3 } from "../contexts/Web3Context";
+import BatchCard from "../components/BatchCard";
+import { RefreshCw } from "../components/Icons";
 
 function DistributorDashboard({ account }) {
+  const { contract } = useWeb3();
   const [batches, setBatches] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [transferTo, setTransferTo] = useState({});
-  const [transferPrice, setTransferPrice] = useState({});
-  const [status, setStatus] = useState(null);
 
-  const loadBatches = async () => {
+  const loadBatches = useCallback(async () => {
+    if (!account) return;
     setLoading(true);
     try {
-      const contract = await getContract();
-      const all = await getAllBatches(contract);
+      const activeContract = contract || (await getContract()).catch(() => getReadOnlyContract());
+      const all = await getAllBatches(activeContract);
       const mine = all.filter(
-        (b) => b.currentOwner.toLowerCase() === account.toLowerCase() && Number(b.currentStage) < 4
+        (b) =>
+          b.currentOwner &&
+          b.currentOwner.toLowerCase() === account.toLowerCase() &&
+          Number(b.currentStage) < 4
       );
       setBatches(mine.reverse());
     } catch (err) {
-      console.error(err);
+      console.error("Failed to load distributor batches:", err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [account, contract]);
 
   useEffect(() => {
     if (account) loadBatches();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
-
-  const handleTransfer = async (batchId) => {
-    setStatus(null);
-    try {
-      const contract = await getContract();
-      const toAddress = transferTo[batchId];
-      const price = transferPrice[batchId];
-      const batch = await contract.getBatch(batchId);
-      const nextStage = Number(batch.currentStage) + 1;
-
-      setStatus({ type: "pending", message: "Confirm transfer in MetaMask..." });
-      const tx = await contract.transferBatch(batchId, toAddress, Number(price), nextStage);
-      await tx.wait();
-
-      setStatus({ type: "success", message: `Batch #${batchId} transferred successfully!` });
-      loadBatches();
-    } catch (err) {
-      setStatus({ type: "error", message: err.reason || err.message });
-    }
-  };
+  }, [account, loadBatches]);
 
   return (
-    <div>
-      <h2 style={{ fontWeight: 900, marginBottom: "16px" }}>BATCHES IN MY CUSTODY</h2>
+    <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
+        <div>
+          <h1 style={{ fontSize: "28px", fontWeight: 800, color: "var(--primary-navy)" }}>
+            Logistics & Cold Chain Fleet Management
+          </h1>
+          <p style={{ color: "var(--text-muted)", fontSize: "14px", marginTop: "4px" }}>
+            Commercial batches currently held under your fleet custody awaiting retailer delivery.
+          </p>
+        </div>
+        <button
+          type="button"
+          className="btn-pill btn-pill-sm btn-pill-white"
+          onClick={loadBatches}
+          disabled={loading}
+        >
+          <span>{loading ? "Syncing..." : "Sync Fleet"}</span>
+          <span className="btn-pill-icon">
+            <RefreshCw size={12} className={loading ? "spin-icon" : ""} />
+          </span>
+        </button>
+      </div>
 
-      {status && <div className={`status-${status.type}`} style={{ marginBottom: "16px" }}>{status.message}</div>}
+      {loading && <p style={{ color: "var(--text-muted)", fontSize: "13px" }}>Checking fleet custody on blockchain...</p>}
 
-      {loading && <p>Loading...</p>}
       {!loading && batches.length === 0 && (
-        <div className="empty-state">No batches currently in your custody.</div>
+        <div className="corp-card" style={{ textAlign: "center", padding: "40px", color: "var(--text-muted)", fontSize: "14px" }}>
+          No batches are currently held in your fleet custody. When a harbor auction or fisherman transfers a batch to your address, it will appear here.
+        </div>
       )}
 
-      {batches.map((batch) => {
-        const batchId = Number(batch.batchId);
-        return (
-          <div className="batch-card" key={batchId}>
-            <div className="batch-card-header">
-              <strong>Batch #{batchId} — {batch.species}</strong>
-              <span className="stage-badge">{STAGE_LABELS[Number(batch.currentStage)]}</span>
-            </div>
-            <div className="batch-detail-row"><span>Quantity</span><span>{Number(batch.quantity)} kg</span></div>
-            <div className="batch-detail-row"><span>Current Price</span><span>₹{Number(batch.currentPrice)}</span></div>
-
-            <div style={{ marginTop: "12px" }}>
-              <label className="brutal-label">Transfer To (Address)</label>
-              <input
-                type="text"
-                className="brutal-input"
-                placeholder="0x..."
-                onChange={(e) => setTransferTo({ ...transferTo, [batchId]: e.target.value })}
-                style={{ marginBottom: "8px" }}
-              />
-              <label className="brutal-label">New Price (₹)</label>
-              <input
-                type="number"
-                className="brutal-input"
-                placeholder="e.g. 700"
-                onChange={(e) => setTransferPrice({ ...transferPrice, [batchId]: e.target.value })}
-                style={{ marginBottom: "8px" }}
-              />
-              <button className="brutal-btn" style={{ width: "100%" }} onClick={() => handleTransfer(batchId)}>
-                TRANSFER TO NEXT STAGE
-              </button>
-            </div>
-          </div>
-        );
-      })}
+      {batches.map((batch) => (
+        <BatchCard
+          key={Number(batch.batchId)}
+          batch={batch}
+          account={account}
+          onRefresh={loadBatches}
+        />
+      ))}
     </div>
   );
 }
