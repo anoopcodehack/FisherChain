@@ -2,7 +2,7 @@ import axios from "axios";
 
 const PINATA_JWT = process.env.REACT_APP_PINATA_JWT;
 const PINATA_BASE_URL = "https://api.pinata.cloud";
-const PINATA_GATEWAY = "https://gateway.pinata.cloud/ipfs";
+const PINATA_GATEWAY = process.env.REACT_APP_PINATA_GATEWAY || "https://gateway.pinata.cloud/ipfs";
 
 /**
  * Uploads a single file (e.g. catch photo) to IPFS via Pinata.
@@ -10,7 +10,8 @@ const PINATA_GATEWAY = "https://gateway.pinata.cloud/ipfs";
  */
 export const uploadFileToIPFS = async (file) => {
   if (!PINATA_JWT) {
-    throw new Error("Pinata JWT not configured. Add REACT_APP_PINATA_JWT to your .env file.");
+    console.warn("Pinata JWT not configured in REACT_APP_PINATA_JWT. Using placeholder CID.");
+    return `QmDemo${Date.now()}`;
   }
 
   const formData = new FormData();
@@ -48,7 +49,6 @@ export const uploadFileToIPFS = async (file) => {
 
 /**
  * Uploads JSON metadata (e.g. batch details, certificates) to IPFS via Pinata.
- * Useful if you want to store structured data alongside a photo.
  */
 export const uploadJSONToIPFS = async (jsonData) => {
   if (!PINATA_JWT) {
@@ -81,6 +81,10 @@ export const uploadJSONToIPFS = async (jsonData) => {
  * an uploaded image/photo back in the UI.
  */
 export const getIPFSUrl = (ipfsHash) => {
-  if (!ipfsHash) return null;
-  return `${PINATA_GATEWAY}/${ipfsHash}`;
+  if (!ipfsHash || ipfsHash === "QmPlaceholderHash123") return null;
+  const clean = ipfsHash.replace(/^ipfs:\/\//, "").trim();
+  if (clean.startsWith("http://") || clean.startsWith("https://")) {
+    return clean;
+  }
+  return `${PINATA_GATEWAY}/${clean}`;
 };
