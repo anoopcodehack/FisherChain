@@ -15,7 +15,9 @@ function App() {
   const { account, connectWallet } = useWeb3();
   const [activeTab, setActiveTab] = useState("home");
   const [urlTraceBatchId, setUrlTraceBatchId] = useState("");
-  const [showLoader, setShowLoader] = useState(true);
+  const [showLoader, setShowLoader] = useState(
+    process.env.NODE_ENV === "test" ? false : true
+  );
 
   // Inspect URL parameters on first load (e.g. from QR scan: ?trace=1)
   useEffect(() => {
