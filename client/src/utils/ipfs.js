@@ -77,6 +77,21 @@ export const uploadJSONToIPFS = async (jsonData) => {
 };
 
 /**
+ * High-resolution authentic seafood species photography fallbacks.
+ * Ensures that product cards and public batch provenance cards always
+ * display beautiful real marine species imagery instead of empty white boxes.
+ */
+export const getSpeciesFallbackImage = (species) => {
+  const s = (species || "").toLowerCase();
+  if (s.includes("mackerel")) return "/assets/mackerel.jpg";
+  if (s.includes("kingfish")) return "/assets/kingfish.jpg";
+  if (s.includes("salmon")) return "/assets/salmon.jpg";
+  if (s.includes("tuna")) return "/assets/tuna.jpg";
+  if (s.includes("sardine") || s.includes("pomfret")) return "/assets/mackerel.jpg";
+  return "/assets/workflow-retail.jpg";
+};
+
+/**
  * Builds a viewable gateway URL from an IPFS hash — use this to display
  * an uploaded image/photo back in the UI.
  */
@@ -85,6 +100,11 @@ export const getIPFSUrl = (ipfsHash) => {
   const clean = ipfsHash.replace(/^ipfs:\/\//, "").trim();
   if (clean.startsWith("http://") || clean.startsWith("https://")) {
     return clean;
+  }
+  // If it's a simulated/mock test hash that won't resolve on Pinata's public gateway,
+  // return null so UI renders the local authentic species photography immediately.
+  if (clean.startsWith("QmDemo") || clean.startsWith("QmTest") || clean.startsWith("QmHash") || clean.startsWith("QmFake")) {
+    return null;
   }
   return `${PINATA_GATEWAY}/${clean}`;
 };

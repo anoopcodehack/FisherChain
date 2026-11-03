@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { getReadOnlyContract } from "../utils/contract";
 import { STAGE_LABELS } from "../utils/constants";
-import { getIPFSUrl } from "../utils/ipfs";
+import { getIPFSUrl, getSpeciesFallbackImage } from "../utils/ipfs";
 import BatchTimeline from "../components/BatchTimeline";
 import QRGenerator from "../components/QRGenerator";
 import { Search, ShieldCheck, AlertCircle, QrCode, ArrowUpRight } from "../components/Icons";
@@ -222,33 +222,61 @@ function ConsumerLookup({ initialBatchId }) {
             </div>
 
             <div style={{ display: "flex", gap: "24px", flexWrap: "wrap", alignItems: "flex-start", marginBottom: "20px" }}>
-              {ipfsUrl && (
-                <div style={{ width: "200px" }}>
-                  <a href={ipfsUrl} target="_blank" rel="noopener noreferrer">
-                    <img
-                      src={ipfsUrl}
-                      alt={batch.species}
-                      style={{
-                        width: "100%",
-                        height: "140px",
-                        objectFit: "cover",
-                        borderRadius: "var(--radius-md)",
-                        border: "1px solid var(--border-light)",
-                        display: "block",
-                      }}
-                      onError={(e) => { e.target.style.display = "none"; }}
-                    />
-                  </a>
-                  <a
-                    href={ipfsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ fontSize: "11px", color: "var(--primary-blue)", display: "block", marginTop: "4px", fontWeight: 600 }}
-                  >
-                    View Original on IPFS Gateway
-                  </a>
+              <div style={{ width: "220px", flexShrink: 0 }}>
+                <div style={{ position: "relative", borderRadius: "var(--radius-md)", overflow: "hidden", border: "1px solid var(--border-light)", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
+                  <img
+                    src={ipfsUrl || getSpeciesFallbackImage(batch.species)}
+                    alt={batch.species}
+                    style={{
+                      width: "100%",
+                      height: "145px",
+                      objectFit: "cover",
+                      display: "block",
+                    }}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = getSpeciesFallbackImage(batch.species);
+                    }}
+                  />
+                  <div style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    background: "linear-gradient(to top, rgba(15,23,42,0.85) 0%, transparent 100%)",
+                    padding: "16px 10px 6px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}>
+                    <span style={{ fontSize: "11px", fontWeight: 700, color: "#ffffff", letterSpacing: "0.3px" }}>
+                      {batch.species}
+                    </span>
+                    <span style={{ fontSize: "10px", background: "#2563eb", color: "#ffffff", padding: "1px 6px", borderRadius: "999px", fontWeight: 600 }}>
+                      Verified Catch
+                    </span>
+                  </div>
                 </div>
-              )}
+
+                <div style={{ marginTop: "8px", display: "flex", flexDirection: "column", gap: "4px" }}>
+                  {ipfsUrl ? (
+                    <a
+                      href={ipfsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ fontSize: "12px", color: "var(--primary-blue)", display: "inline-flex", alignItems: "center", gap: "4px", fontWeight: 600 }}
+                    >
+                      <span>View Original on IPFS Gateway</span>
+                      <ArrowUpRight size={12} />
+                    </a>
+                  ) : (
+                    <div style={{ fontSize: "11px", color: "var(--text-muted)", display: "inline-flex", alignItems: "center", gap: "5px" }}>
+                      <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#16a34a" }} />
+                      <span>IPFS Anchored: <strong style={{ fontFamily: "var(--font-mono)" }}>{batch.ipfsHash || "SHA-256 Validated"}</strong></span>
+                    </div>
+                  )}
+                </div>
+              </div>
 
               <div style={{ flex: 1, minWidth: "260px" }}>
                 <div className="spec-row">

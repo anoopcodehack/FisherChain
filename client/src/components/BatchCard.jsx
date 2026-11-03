@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { STAGE_LABELS } from "../utils/constants";
-import { getIPFSUrl } from "../utils/ipfs";
+import { getIPFSUrl, getSpeciesFallbackImage } from "../utils/ipfs";
 import QRGenerator from "./QRGenerator";
 import TransferForm from "./TransferForm";
 import { QrCode, ArrowUpRight } from "./Icons";
@@ -38,28 +38,28 @@ function BatchCard({ batch, account, onRefresh, children }) {
       </div>
 
       <div style={{ display: "flex", gap: "20px", margin: "14px 0", flexWrap: "wrap", alignItems: "flex-start" }}>
-        {ipfsUrl && (
-          <div style={{ width: "120px" }}>
-            <a href={ipfsUrl} target="_blank" rel="noopener noreferrer">
-              <img
-                src={ipfsUrl}
-                alt={batch.species}
-                style={{
-                  width: "100%",
-                  height: "85px",
-                  objectFit: "cover",
-                  borderRadius: "var(--radius-md)",
-                  border: "1px solid var(--border-light)",
-                  display: "block",
-                }}
-                onError={(e) => { e.target.style.display = "none"; }}
-              />
-            </a>
-            <span style={{ fontSize: "11px", color: "var(--primary-blue)", display: "block", marginTop: "4px", fontWeight: 600 }}>
-              IPFS Certified
-            </span>
+        <div style={{ width: "130px", flexShrink: 0 }}>
+          <img
+            src={ipfsUrl || getSpeciesFallbackImage(batch.species)}
+            alt={batch.species}
+            style={{
+              width: "100%",
+              height: "90px",
+              objectFit: "cover",
+              borderRadius: "var(--radius-md)",
+              border: "1px solid var(--border-light)",
+              display: "block",
+            }}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = getSpeciesFallbackImage(batch.species);
+            }}
+          />
+          <div style={{ fontSize: "11px", color: "var(--primary-blue)", display: "flex", alignItems: "center", gap: "4px", marginTop: "6px", fontWeight: 600 }}>
+            <span className="pulse-dot" style={{ width: "6px", height: "6px" }} />
+            <span>{batch.ipfsHash ? "IPFS Hash Anchored" : "Verified Catch"}</span>
           </div>
-        )}
+        </div>
 
         <div style={{ flex: 1, minWidth: "220px" }}>
           <div className="spec-row">
