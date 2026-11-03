@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { CONTRACT_ADDRESS } from "../utils/contract";
-import { Copy, Check, ArrowUpRight } from "./Icons";
+import { Copy, Check, ArrowUpRight, RotateCw } from "./Icons";
 
 function Footer({ setActiveTab, onReplayLoader }) {
   const [copied, setCopied] = useState(false);
@@ -92,8 +92,9 @@ function Footer({ setActiveTab, onReplayLoader }) {
               Get regulatory updates, GDST compliance guides, and pilot deployment releases.
             </p>
             {subscribed ? (
-              <div style={{ fontSize: "12px", color: "#16a34a", fontWeight: 600 }}>
-                ✓ Thank you. Your enterprise request has been registered.
+              <div style={{ fontSize: "12px", color: "#16a34a", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px" }}>
+                <Check size={14} />
+                <span>Thank you. Your enterprise request has been registered.</span>
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="footer-dispatch-form">
@@ -334,10 +335,11 @@ function Footer({ setActiveTab, onReplayLoader }) {
           {onReplayLoader && (
             <button
               type="button"
-              style={{ background: "none", border: "none", color: "var(--primary-blue)", fontSize: "12px", fontWeight: 600, cursor: "pointer" }}
+              style={{ background: "none", border: "none", color: "var(--primary-blue)", fontSize: "12px", fontWeight: 600, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "6px" }}
               onClick={onReplayLoader}
             >
-              Replay Intro Animation ⚡
+              <RotateCw size={13} />
+              <span>Replay Intro Animation</span>
             </button>
           )}
           <span>99.99% Node Uptime SLA</span>

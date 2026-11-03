@@ -8,7 +8,9 @@ import {
   Truck,
   Store,
   QrCode,
-  AlertCircle
+  AlertCircle,
+  Check,
+  X
 } from "../components/Icons";
 
 function HomePage({ setActiveTab }) {
@@ -188,11 +190,13 @@ function HomePage({ setActiveTab }) {
                 alt="Commercial Maritime Fishing Vessel"
                 className="hero-showcase-img"
               />
-              <div className="hero-floating-chip chip-left">
-                ⚓ FAO Area 27 Verified Catch
+              <div className="hero-floating-chip chip-left" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                <Anchor size={13} style={{ color: "var(--primary-blue)" }} />
+                <span>FAO Area 27 Verified Catch</span>
               </div>
-              <div className="hero-floating-chip chip-right">
-                ❄️ Cold Chain: -18.4°C Optimal
+              <div className="hero-floating-chip chip-right" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                <Activity size={13} style={{ color: "#0284c7" }} />
+                <span>Cold Chain: -18.4°C Optimal</span>
               </div>
             </div>
 
@@ -510,25 +514,25 @@ function HomePage({ setActiveTab }) {
               </h3>
             </div>
             <div className="comparison-item">
-              <span style={{ color: "#dc2626", fontWeight: 700 }}>✕</span>
+              <X size={15} style={{ color: "#dc2626", flexShrink: 0, marginTop: "3px" }} />
               <div>
                 <strong>~20% Mislabeled Catch:</strong> Farmed fish sold as wild; cheap fish substituted for premium tuna and kingfish.
               </div>
             </div>
             <div className="comparison-item">
-              <span style={{ color: "#dc2626", fontWeight: 700 }}>✕</span>
+              <X size={15} style={{ color: "#dc2626", flexShrink: 0, marginTop: "3px" }} />
               <div>
                 <strong>Paper Manifests Easily Altered:</strong> Origin documents, catch dates, and weights can be rewritten at any transit port.
               </div>
             </div>
             <div className="comparison-item">
-              <span style={{ color: "#dc2626", fontWeight: 700 }}>✕</span>
+              <X size={15} style={{ color: "#dc2626", flexShrink: 0, marginTop: "3px" }} />
               <div>
                 <strong>3–4 Week Recall Times:</strong> In contamination events, tracing back through paper logs takes weeks.
               </div>
             </div>
             <div className="comparison-item">
-              <span style={{ color: "#dc2626", fontWeight: 700 }}>✕</span>
+              <X size={15} style={{ color: "#dc2626", flexShrink: 0, marginTop: "3px" }} />
               <div>
                 <strong>Opaque Harbor Margins:</strong> Middlemen mark up seafood prices 300% while artisanal boat captains lack visibility.
               </div>
@@ -544,25 +548,25 @@ function HomePage({ setActiveTab }) {
               </h3>
             </div>
             <div className="comparison-item">
-              <span style={{ color: "#16a34a", fontWeight: 700 }}>✓</span>
+              <Check size={15} style={{ color: "#16a34a", flexShrink: 0, marginTop: "3px" }} />
               <div>
                 <strong>Zero Species Fraud:</strong> Immutable species identity anchored to Ethereum block timestamp and GPS coordinates.
               </div>
             </div>
             <div className="comparison-item">
-              <span style={{ color: "#16a34a", fontWeight: 700 }}>✓</span>
+              <Check size={15} style={{ color: "#16a34a", flexShrink: 0, marginTop: "3px" }} />
               <div>
                 <strong>Cryptographic Tamper-Proofing:</strong> Strict monotonic forward state machine prevents any record alteration.
               </div>
             </div>
             <div className="comparison-item">
-              <span style={{ color: "#16a34a", fontWeight: 700 }}>✓</span>
+              <Check size={15} style={{ color: "#16a34a", flexShrink: 0, marginTop: "3px" }} />
               <div>
                 <strong>Instant Sub-Second Recall:</strong> Query batch ID to immediately pinpoint the origin vessel and cold-chain route.
               </div>
             </div>
             <div className="comparison-item">
-              <span style={{ color: "#16a34a", fontWeight: 700 }}>✓</span>
+              <Check size={15} style={{ color: "#16a34a", flexShrink: 0, marginTop: "3px" }} />
               <div>
                 <strong>Transparent Harbor Settlement:</strong> Complete on-chain transaction history showing pricing progression.
               </div>
